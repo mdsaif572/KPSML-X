@@ -167,12 +167,15 @@ def get_all_versions():
     except FileNotFoundError:
         vr = ''
     try:
-        vpy = get_distribution('pyrogram').version
+        vpy = get_distribution('wzgram').version
     except DistributionNotFound:
         try:
-            vpy = get_distribution('pyrofork').version
+            vpy = get_distribution('pyrogram').version
         except DistributionNotFound:
-            vpy = "2.xx.xx"
+            try:
+                vpy = get_distribution('pyrofork').version
+            except DistributionNotFound:
+                vpy = "2.xx.xx"
     bot_cache['eng_versions'] = {'p7zip':vp, 'ffmpeg': vf, 'rclone': vr,
                                     'aria': aria2.client.get_version()['version'],
                                     'aiohttp': get_distribution('aiohttp').version,
