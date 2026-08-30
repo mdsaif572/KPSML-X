@@ -7,3 +7,12 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
+    depends_on:
+      - flaresolverr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    restart: on-failure
+    ports:
+      - "8191:8191"
+    environment:
+      - LOG_LEVEL=info
