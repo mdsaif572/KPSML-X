@@ -1,21 +1,16 @@
 <div align=center>
 
-## KPSML-X: Ultimate Multi-Cloud Telegram Leech Bot
+## Cloud Station: Ultimate Multi-Cloud Telegram Leech Bot
 
 <p>
-    <a href="https://github.com/Tamilupdates/KPSML-X">
+    <a href="https://telegram.me/cloud_station9">
         <kbd>
-            <img src="https://graph.org/file/879239eb830dd6c00b07e.jpg" width="550" alt="KPSML-X Logo">
+            <img src="https://graph.org/file/879239eb830dd6c00b07e.jpg" width="550" alt="Cloud Station Logo">
         </kbd>
     </a>
 </p>
 
-<a href="https://github.com/Tamilupdates/KPSML-X/fork"><img alt="Forks" src="https://img.shields.io/github/forks/Tamilupdates/KPSML-X?style=plastic&logo=git&color=orange&label=Forks"></a> 
-<a href="https://github.com/Tamilupdates/KPSML-X/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Tamilupdates/KPSML-X?style=plastic&logo=github&color=FFD700&label=Stars"></a>
-<a href="https://hub.docker.com/r/nanthakps/kpsmlx"><img src="https://img.shields.io/docker/pulls/nanthakps/kpsmlx?style=plastic&logo=docker&label=Pulls" alt="Docker Pulls"></a>
-
-<a href="https://telegram.me/KPSBots"><img alt="Telegram Channel" img src="https://img.shields.io/badge/Join%20on%20Telegram%20Channel-0088CC?style=plastic&logo=telegram&logoColor=white&labelColor=0A3D62" width="250"></a>
-
+<a href="https://telegram.me/cloud_station9"><img alt="Telegram Channel" img src="https://img.shields.io/badge/Join%20on%20Telegram%20Channel-0088CC?style=plastic&logo=telegram&logoColor=white&labelColor=0A3D62" width="250"></a>
 
 #### ***⚡️ Download Anything. Upload Everywhere. 🔥***
 
@@ -34,7 +29,7 @@
 
 ---
 
-_KPSML-X is designed to make file management seamless, fast, and flexible._
+_Cloud Station is designed to make file management seamless, fast, and flexible._
 
 - **🌐 Universal Downloader** - Supports torrents, Mega, Google Drive, direct links, and all `yt-dlp` sites.  
 
@@ -52,7 +47,7 @@ _KPSML-X is designed to make file management seamless, fast, and flexible._
 
 - **💨 Lightweight Performance** - Optimized Python & Pyrogram async engine for speed.  
 
-- **💬 Active Community Support** - Join **[@KPSBots](https://telegram.me/KPSBots)** for updates and help.
+- **💬 Active Community Support** - Join **[@cloud_station9](https://telegram.me/cloud_station9)** for updates and help.
 
 </details>
 
@@ -79,7 +74,7 @@ _KPSML-X is designed to make file management seamless, fast, and flexible._
 Clone this repository:
 
 ```bash
-git clone https://github.com/Tamilupdates/KPSML-X kpsml-x && cd kpsml-x
+git clone https://github.com/mdsaif572/KPSML-X cloud-station && cd cloud-station
 ```
 
 Setting up config file:
@@ -117,13 +112,13 @@ There are two methods to build and run the Docker image:
 - **Build the Docker image:**
 
   ```bash
-  sudo docker build . -t kpsmlx
+  sudo docker build . -t cloud-station
   ```
 
 - **Run the image:**
 
   ```bash
-  sudo docker run -p 80:80 -p 8080:8080 kpsmlx
+  sudo docker run -p 80:80 -p 8080:8080 cloud-station
   ```
 
 - **To stop the running image:**
@@ -144,7 +139,7 @@ There are two methods to build and run the Docker image:
 
 ### 3.2 Using docker-compose (Recommended)
 
-**Note:** If you want to use ports other than 80 and 8080 for torrent file selection and rclone serve respectively, update them in [docker-compose.yml](https://github.com/Tamilupdates/KPSML-X/blob/main/docker-compose.yml).
+**Note:** If you want to use ports other than 80 and 8080 for torrent file selection and rclone serve respectively, update them in [docker-compose.yml](https://github.com/mdsaif572/KPSML-X/blob/main/docker-compose.yml).
 
 - **Install docker-compose:**
 
@@ -225,7 +220,7 @@ sudo docker image prune -a
 > Make sure git is Installed in your system or quick run `apt-get install git pip curl -y`
 
 ```shell
-git clone https://github.com/Tamilupdates/KPSML-X kpsml-x && cd kpsml-x 
+git clone https://github.com/mdsaif572/KPSML-X cloud-station && cd cloud-station 
 ```
 
 ---
@@ -234,7 +229,7 @@ git clone https://github.com/Tamilupdates/KPSML-X kpsml-x && cd kpsml-x
 
 > For Android : Use `termux` (Download via FDroid) for CLI usage
 
-**The script requires sudo and isn’t Windows compatible.**
+**The script requires sudo and isn't Windows compatible.**
 
 ```shell
 curl https://cli-assets.heroku.com/install.sh | sh
@@ -318,8 +313,8 @@ nano config.env
   DATABASE_URL = ""
   BASE_URL = ""
   SET_COMMANDS = "True"
-  UPSTREAM_REPO = "https://github.com/Tamilupdates/KPSML-X"
-  UPSTREAM_BRANCH = "kpsmlx"
+  UPSTREAM_REPO = "https://github.com/mdsaif572/KPSML-X"
+  UPSTREAM_BRANCH = "upstream"
   ```
 - After Setup Exit from Editor via `CTRL + X`, followed via `y` and `Enter`...
 
@@ -389,7 +384,7 @@ heroku logs -a APP_NAME
         - Any change in docker you need to deploy/build again with updated repo to take effect. 
         - **No Need to delete .gitignore file or any File**
 
-- `UPSTREAM_BRANCH`: Upstream branch for update. Default is `kpsmlx`. `Str`
+- `UPSTREAM_BRANCH`: Upstream branch for update. Default is `upstream`. `Str`
 
 </details>
 
@@ -397,5 +392,5 @@ heroku logs -a APP_NAME
 
 ## 🌿 Branch Specifications
 
-- All files to be Uploaded in `main` Branch and set Upstream as `kpsmlx` Branch.
-- View the **Upstream Branch**: **[kpsmlx](https://github.com/Tamilupdates/KPSML-X/tree/kpsmlx)**
+- All files to be Uploaded in `main` Branch and set Upstream as `upstream` Branch.
+- View the **Upstream Branch**: **[upstream](https://github.com/mdsaif572/KPSML-X/tree/upstream)**
