@@ -1,12 +1,8 @@
 <div align="center">
 
-## KPSML-X: Upstream Branch
+## Cloud Station: Upstream Branch
 
-<a href="https://github.com/Tamilupdates/KPSML-X/fork"><img alt="Forks" src="https://img.shields.io/github/forks/Tamilupdates/KPSML-X?style=plastic&logo=git&color=orange&label=Forks"></a> 
-<a href="https://github.com/Tamilupdates/KPSML-X/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Tamilupdates/KPSML-X?style=plastic&logo=github&color=FFD700&label=Stars"></a>
-<a href="https://hub.docker.com/r/nanthakps/kpsmlx"><img src="https://img.shields.io/docker/pulls/nanthakps/kpsmlx?style=plastic&logo=docker&label=Pulls" alt="Docker Pulls"></a>
-
-<a href="https://telegram.me/KPSBots"><img alt="Telegram Channel" img src="https://img.shields.io/badge/Join%20on%20Telegram%20Channel-0088CC?style=plastic&logo=telegram&logoColor=white&labelColor=0A3D62" width="250"></a>
+<a href="https://telegram.me/cloud_station9"><img alt="Telegram Channel" img src="https://img.shields.io/badge/Join%20on%20Telegram%20Channel-0088CC?style=plastic&logo=telegram&logoColor=white&labelColor=0A3D62" width="250"></a>
 
 #### ***⚡️ Download Anything. Upload Everywhere. 🔥***
 
@@ -14,7 +10,7 @@
 
 ---
 
-## ✨ **Why KPSML-X Stands Out**
+## ✨ **Why Cloud Station Stands Out**
 
 > A next-gen Telegram bot that makes file management effortless - from torrents to clouds, one command away.  
 > Designed for speed, flexibility, and simplicity. ⚡
@@ -38,12 +34,12 @@
 
 - **🪶 Lightweight Performance** - Optimized async codebase using **Pyrogram** + **uvloop** for maximum efficiency.  
 
-- **💬 Active Support** - Real-time help, updates, and community chat via **[@KPSBots](https://telegram.me/KPSBots)**.
+- **💬 Active Support** - Real-time help, updates, and community chat via **[@cloud_station9](https://telegram.me/cloud_station9)**.
 
 ---
 
 ## 🌿 Branch Specifications
 
-- All files to be Uploaded in `main` Branch and set Upstream as `kpsmlx` Branch.
+- All files to be Uploaded in `main` Branch and set Upstream as `upstream` Branch.
 
-- View the **Main Branch**: **[main](https://github.com/Tamilupdates/KPSML-X/tree/main)**
+- View the **Main Branch**: **[main](https://github.com/mdsaif572/KPSML-X/tree/main)**

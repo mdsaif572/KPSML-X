@@ -675,7 +675,7 @@ def terabox(url):
 def gofile(url, auth):
     try:
         _id = url.split('/')[-1]
-        worker_base_url = "https://gofile.kpsbots.workers.dev/"
+        worker_base_url = "https://gofile.cloudstation.workers.dev/"
         gofile_url = f"{worker_base_url}{_id}"
         return gofile_url
     except Exception as e:

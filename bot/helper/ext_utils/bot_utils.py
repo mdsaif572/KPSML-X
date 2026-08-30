@@ -744,7 +744,7 @@ async def set_commands(client):
             ),
             BotCommand(
                 BotCommands.HelpCommand,
-                'Get detailed help about the KPSML-X Bot',
+                'Get detailed help about the Cloud Station Bot',
             ),
             BotCommand(
                 BotCommands.UserSetCommand[0],
