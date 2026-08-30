@@ -159,6 +159,8 @@ def direct_link_generator(link):
         return letsupload(link)
     elif 'gofile.io' in domain:
         return gofile(link, auth)
+    elif any(x in domain for x in ['gdflix.io', 'gdflix.com', 'gdflix.net', 'gdflix.xyz', 'gdflix.org', 'gdflix.site', 'gdflix.cc', 'gdflix.co']):
+        return gdflix(link)
     elif 'easyupload.io' in domain:
         return easyupload(link)
     elif 'streamvid.net' in domain:
@@ -1303,3 +1305,101 @@ def streamvid(url: str):
         elif error:= html.xpath('//div[@class="not-found-text"]/text()'):
             raise DirectDownloadLinkException(f'ERROR: {error[0]}')
         raise DirectDownloadLinkException('ERROR: Something went wrong')
+
+
+def gdflix(url):
+    """GDFlix Direct Link Generator
+    Extracts direct download link from GDFlix file pages.
+    Uses curl_cffi for Cloudflare bypass, with cloudscraper fallback.
+    """
+    session = None
+    page_text = ''
+    page_content = None
+
+    # Try curl_cffi first (best Cloudflare bypass via browser TLS impersonation)
+    try:
+        from curl_cffi import requests as cf_requests
+        session = cf_requests.Session(impersonate="firefox")
+        session.headers.update({'referer': url})
+        resp = session.get(url, timeout=30)
+        if resp.status_code == 200 and 'instant.busycdn' in resp.text:
+            page_text = resp.text
+            page_content = resp.content
+            LOGGER.info('gdflix: Fetched page via curl_cffi')
+    except ImportError:
+        LOGGER.warning('gdflix: curl_cffi not installed, trying cloudscraper')
+    except Exception as e:
+        LOGGER.warning(f'gdflix: curl_cffi failed: {e.__class__.__name__}')
+
+    # Fallback to cloudscraper
+    if not page_text:
+        try:
+            scraper = create_scraper()
+            scraper.headers.update({'user-agent': user_agent, 'referer': url})
+            resp = scraper.get(url, timeout=30)
+            if resp.status_code == 200:
+                page_text = resp.text
+                page_content = resp.content
+                session = scraper
+                LOGGER.info('gdflix: Fetched page via cloudscraper')
+        except Exception as e:
+            LOGGER.warning(f'gdflix: cloudscraper failed: {e.__class__.__name__}')
+
+    if not page_text:
+        raise DirectDownloadLinkException('ERROR: Failed to fetch GDFlix page (Cloudflare protected). Install curl_cffi for better bypass.')
+
+    html = HTML(page_content)
+
+    # Method 1: Extract instant download link (busycdn) from HTML
+    if busycdn_links := html.xpath('//a[contains(@href,"instant.busycdn")]/@href'):
+        busycdn_url = busycdn_links[0]
+        try:
+            resp = session.get(busycdn_url, allow_redirects=False, timeout=30)
+            if resp.status_code == 302 and (location := resp.headers.get('location', '')):
+                # Location is like: https://fastdl-one.pages.dev/?url=<GDRIVE_URL>
+                # Extract the actual download URL from the 'url' query parameter
+                parsed = urlparse(location)
+                qs = parse_qs(parsed.query)
+                if direct_url := qs.get('url', [None])[0]:
+                    name = direct_url.split('/')[-1].split('?')[0] if '?' in direct_url else direct_url.split('/')[-1]
+                    return f"{direct_url}#{name}" if name else direct_url
+                # If no url param, return the location itself
+                return location
+        except Exception as e:
+            LOGGER.error(f"gdflix: busycdn extraction failed: {e}")
+
+    # Method 2: API POST with action=direct
+    if key_match := findall(r'key",\s*"([a-f0-9]{30,})"', page_text):
+        key = key_match[0]
+        try:
+            resp = session.post(url, data={
+                'action': 'direct',
+                'key': key,
+                'action_token': '',
+            }, headers={'x-token': urlparse(url).hostname or ''}, timeout=30)
+            data = resp.json()
+            if not data.get('error'):
+                if direct_url := data.get('url') or data.get('visit_url'):
+                    return direct_url
+            LOGGER.warning(f"gdflix: API returned error: {data.get('message', 'unknown')}")
+        except Exception as e:
+            LOGGER.error(f"gdflix: API direct action failed: {e}")
+
+    # Method 3: Try API with action=original
+    if key_match:
+        key = key_match[0]
+        try:
+            resp = session.post(url, data={
+                'action': 'original',
+                'key': key,
+                'action_token': '',
+            }, headers={'x-token': urlparse(url).hostname or ''}, timeout=30)
+            data = resp.json()
+            if not data.get('error'):
+                if direct_url := data.get('url') or data.get('visit_url'):
+                    return direct_url
+            LOGGER.warning(f"gdflix: API original action returned error: {data.get('message', 'unknown')}")
+        except Exception as e:
+            LOGGER.error(f"gdflix: API original action failed: {e}")
+
+    raise DirectDownloadLinkException('ERROR: Could not extract direct link from GDFlix. The file may require login or cloud storage limit exceeded.')
