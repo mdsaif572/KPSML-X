@@ -163,6 +163,8 @@ def direct_link_generator(link):
         return gdflix(link)
     elif any(x in domain for x in ['hubcloud.cx', 'hubcloud.club', 'hubcloud.fans', 'hubcloud.net']):
         return hubcloud(link)
+    elif any(x in domain for x in ['hubdrive.tips', 'hubdrive.cc', 'hubdrive.co', 'hubdrive.net', 'hubdrive.io']):
+        return hubdrive(link)
     elif 'easyupload.io' in domain:
         return easyupload(link)
     elif 'streamvid.net' in domain:
@@ -1506,3 +1508,108 @@ def hubcloud(url):
         raise DirectDownloadLinkException(f'ERROR: {e.__class__.__name__} - Failed to follow HubCloud redirects')
 
     raise DirectDownloadLinkException('ERROR: Could not extract direct link from HubCloud')
+
+
+def hubdrive(url):
+    """HubDrive Direct Link Generator (hubdrive.tips)
+    Uses FlareSolverr to bypass Cloudflare managed challenge.
+    Flow: FlareSolverr → get cf_clearance → AJAX POST /ajax.php → get /dl/ page → extract workers.dev direct URL
+    """
+    import json as _json
+
+    # Extract file ID from URL
+    file_id = url.rstrip('/').split('/')[-1]
+
+    # FlareSolverr endpoint (must be running on the host)
+    fs_url = 'http://localhost:8191/v1'
+
+    # Check if FlareSolverr is available
+    try:
+        fs_check = req_session().get(fs_url.replace('/v1', '/health'), timeout=5)
+        if fs_check.status_code != 200:
+            raise DirectDownloadLinkException('ERROR: FlareSolverr not healthy. Install FlareSolverr for HubDrive support.')
+    except Exception:
+        raise DirectDownloadLinkException('ERROR: FlareSolverr not found. Install FlareSolverr (Docker: flaresolverr/flaresolverr) for HubDrive support.')
+
+    fs_session = req_session()
+
+    # Step 1: Get page via FlareSolverr to solve Cloudflare challenge and get cookies
+    try:
+        fs_resp = fs_session.post(fs_url, json={
+            'cmd': 'request.get',
+            'url': url,
+            'maxTimeout': 60000
+        }, timeout=90)
+        fs_data = fs_resp.json()
+        sol = fs_data.get('solution', {})
+        if fs_data.get('status') != 'ok' or sol.get('status') != 200:
+            raise DirectDownloadLinkException('ERROR: FlareSolverr failed to solve Cloudflare challenge')
+        cookies = {c['name']: c['value'] for c in sol.get('cookies', [])}
+        ua = sol.get('userAgent', user_agent)
+    except DirectDownloadLinkException:
+        raise
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: FlareSolverr request failed: {e.__class__.__name__}')
+
+    # Step 2: AJAX POST to get download data
+    try:
+        session = req_session()
+        session.headers.update({
+            'User-Agent': ua,
+            'Referer': url,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Origin': urlparse(url).scheme + '://' + urlparse(url).hostname,
+        })
+        session.cookies.update(cookies)
+
+        ajax_resp = session.post(
+            f'{urlparse(url).scheme}://{urlparse(url).hostname}/ajax.php?ajax=direct-download',
+            data=f'id={file_id}',
+            timeout=30
+        )
+        result = ajax_resp.json()
+
+        if result.get('code') != '200':
+            raise DirectDownloadLinkException(f'ERROR: HubDrive API error: {result.get("file") or result.get("message")}')
+
+        dl_data = result.get('data', {})
+        name = dl_data.get('n', '')
+        file_path = result.get('file', '')
+
+        if not file_path:
+            raise DirectDownloadLinkException('ERROR: HubDrive API did not return download path')
+
+    except DirectDownloadLinkException:
+        raise
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: HubDrive AJAX failed: {e.__class__.__name__}')
+
+    # Step 3: Fetch /dl/ page to get the workers.dev direct download URL
+    try:
+        dl_url = f'{urlparse(url).scheme}://{urlparse(url).hostname}{file_path}'
+        dl_resp = session.get(dl_url, timeout=30, headers={'Referer': f'{urlparse(url).scheme}://{urlparse(url).hostname}/newdl'})
+
+        # Extract workers.dev URL from the /dl/ page
+        workers_urls = findall(r'(https?://[^/\s"\']*\.workers\.dev/[^\s"\']+)', dl_resp.text)
+
+        if not workers_urls:
+            # Try extracting from href attributes
+            dl_html = HTML(dl_resp.content)
+            workers_urls = dl_html.xpath('//a[contains(@href,".workers.dev")]/@href')
+
+        if not workers_urls:
+            raise DirectDownloadLinkException('ERROR: Could not find direct download link on HubDrive /dl/ page')
+
+        direct_url = workers_urls[0]
+
+        # Use the filename from API response
+        if name:
+            return f"{direct_url}#{name}"
+        return direct_url
+
+    except DirectDownloadLinkException:
+        raise
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: HubDrive /dl/ page fetch failed: {e.__class__.__name__}')
