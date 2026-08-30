@@ -161,6 +161,8 @@ def direct_link_generator(link):
         return gofile(link, auth)
     elif any(x in domain for x in ['gdflix.io', 'gdflix.com', 'gdflix.net', 'gdflix.xyz', 'gdflix.org', 'gdflix.site', 'gdflix.cc', 'gdflix.co']):
         return gdflix(link)
+    elif any(x in domain for x in ['hubcloud.cx', 'hubcloud.club', 'hubcloud.fans', 'hubcloud.net']):
+        return hubcloud(link)
     elif 'easyupload.io' in domain:
         return easyupload(link)
     elif 'streamvid.net' in domain:
@@ -1403,3 +1405,104 @@ def gdflix(url):
             LOGGER.error(f"gdflix: API original action failed: {e}")
 
     raise DirectDownloadLinkException('ERROR: Could not extract direct link from GDFlix. The file may require login or cloud storage limit exceeded.')
+
+
+def hubcloud(url):
+    """HubCloud Direct Link Generator
+    Extracts direct download link from HubCloud file pages.
+    Flow: hubcloud.cx → gamerxyt.com/hubcloud.php → gpdl.hubcloud.cx → final GDrive URL
+    """
+    session = req_session()
+    session.headers.update({
+        'user-agent': user_agent,
+        'referer': url,
+    })
+
+    # Step 1: Fetch HubCloud page and extract gamerxyt.com generate link
+    try:
+        resp = session.get(url, timeout=30)
+        if resp.status_code != 200:
+            raise DirectDownloadLinkException(f'ERROR: HubCloud page returned {resp.status_code}')
+        html = HTML(resp.content)
+    except DirectDownloadLinkException:
+        raise
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: {e.__class__.__name__} - Failed to fetch HubCloud page')
+
+    # Extract the generate link (gamerxyt.com/hubcloud.php?...)
+    gen_links = html.xpath('//a[contains(@href,"hubcloud.php")]/@href')
+    if not gen_links:
+        gen_links = findall(r'(https?://[^\s"\']+hubcloud\.php[^\s"\']*)', resp.text)
+    if not gen_links:
+        raise DirectDownloadLinkException('ERROR: Could not find download link on HubCloud page')
+
+    gen_url = gen_links[0]
+
+    # Step 2: Fetch gamerxyt.com/hubcloud.php page to get gpdl link
+    try:
+        gen_resp = session.get(gen_url, timeout=30, headers={'referer': url})
+        if gen_resp.status_code != 200:
+            raise DirectDownloadLinkException(f'ERROR: Generate page returned {gen_resp.status_code}')
+        gen_html = HTML(gen_resp.content)
+    except DirectDownloadLinkException:
+        raise
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: {e.__class__.__name__} - Failed to fetch generate page')
+
+    # Extract title for filename
+    title = ''
+    if title_tags := gen_html.xpath('//title/text()'):
+        title = title_tags[0].strip()
+
+    # Step 3: Find gpdl.hubcloud.cx link and follow redirects
+    gpdl_links = gen_html.xpath('//a[contains(@href,"gpdl.hubcloud")]/@href')
+    if not gpdl_links:
+        gpdl_links = findall(r'(https?://gpdl\.hubcloud[^\s"\']+)', gen_resp.text)
+    if not gpdl_links:
+        raise DirectDownloadLinkException('ERROR: Could not find direct download link on generate page')
+
+    gpdl_url = gpdl_links[0]
+
+    # Step 4: Follow redirects: gpdl.hubcloud.cx → workers.dev → gamerxyt.com/dl.php?link=<GDRIVE_URL>
+    try:
+        # gpdl.hubcloud.cx → 302 → workers.dev → 302 → gamerxyt.com/dl.php?link=<URL>
+        resp1 = session.get(gpdl_url, allow_redirects=False, timeout=30)
+        if resp1.status_code in (301, 302, 303, 307, 308):
+            location1 = resp1.headers.get('location', '')
+            # Follow to workers.dev
+            resp2 = session.get(location1, allow_redirects=False, timeout=30)
+            if resp2.status_code in (301, 302, 303, 307, 308):
+                location2 = resp2.headers.get('location', '')
+                # location2 is: gamerxyt.com/dl.php?link=<GDRIVE_URL>
+                parsed = urlparse(location2)
+                qs = parse_qs(parsed.query)
+                direct_url = qs.get('link', [None])[0]
+                if direct_url:
+                    name = title if title else (direct_url.split('/')[-1].split('?')[0] if '?' in direct_url else direct_url.split('/')[-1])
+                    return f"{direct_url}#{name}" if name else direct_url
+                # If no link param, try following further
+                resp3 = session.get(location2, allow_redirects=False, timeout=30)
+                if resp3.status_code in (301, 302, 303, 307, 308):
+                    return resp3.headers.get('location', location2)
+                return location2
+            elif resp2.status_code == 200:
+                # Maybe the page itself has the link
+                parsed = urlparse(location1)
+                qs = parse_qs(parsed.query)
+                direct_url = qs.get('link', [None])[0]
+                if direct_url:
+                    name = title if title else (direct_url.split('/')[-1].split('?')[0] if '?' in direct_url else direct_url.split('/')[-1])
+                    return f"{direct_url}#{name}" if name else direct_url
+                return location1
+        elif resp1.status_code == 200:
+            # Direct response, check for redirect in page
+            parsed = urlparse(gpdl_url)
+            qs = parse_qs(parsed.query)
+            direct_url = qs.get('link', [None])[0]
+            if direct_url:
+                name = title if title else (direct_url.split('/')[-1].split('?')[0] if '?' in direct_url else direct_url.split('/')[-1])
+                return f"{direct_url}#{name}" if name else direct_url
+    except Exception as e:
+        raise DirectDownloadLinkException(f'ERROR: {e.__class__.__name__} - Failed to follow HubCloud redirects')
+
+    raise DirectDownloadLinkException('ERROR: Could not extract direct link from HubCloud')
