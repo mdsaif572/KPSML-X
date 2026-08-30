@@ -5,7 +5,7 @@
 
 ### ***Requirements :***
 1. A Local Editor or Use [github.dev](https://github.dev)
-2. **Sample File :** Check [kpsml_minimal.py](https://github.com/Tamilupdates/KPSML-X/blob/kpsmlx/bot/helper/themes/kpsml_minimal.py)
+2. **Sample File :** Check [kpsml_minimal.py](https://github.com/mdsaif572/KPSML-X/blob/upstream/bot/helper/themes/kpsml_minimal.py)
 
 ---
 

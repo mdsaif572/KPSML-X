@@ -38,14 +38,14 @@ default_values = {'AUTO_DELETE_MESSAGE_DURATION': 30,
                   'RSS_DELAY': 600,
                   'STATUS_UPDATE_INTERVAL': 2,
                   'SEARCH_LIMIT': 0,
-                  'UPSTREAM_BRANCH': 'update',
+                  'UPSTREAM_BRANCH': 'upstream',
                   'BOT_THEME': 'minimal',
                   'BOT_LANG': 'en',
                   'IMG_PAGE': 1,
-                  'AUTHOR_NAME': 'KPS Bots',
-                  'AUTHOR_URL': 'https://telegram.me/KPSBots',
-                  'TITLE_NAME': 'KPSML-X Leech Bot',
-                  'GD_INFO': 'Uploaded by KPSML-X Leech Bot',
+                  'AUTHOR_NAME': 'Cloud Station',
+                  'AUTHOR_URL': 'https://telegram.me/cloud_station9',
+                  'TITLE_NAME': 'Cloud Station Leech Bot',
+                  'GD_INFO': 'Uploaded by Cloud Station Leech Bot',
                   }
 bool_vars = ['AS_DOCUMENT', 'BOT_PM', 'STOP_DUPLICATE', 'SET_COMMANDS', 'SAVE_MSG', 'SHOW_MEDIAINFO', 'SOURCE_LINK', 'SAFE_MODE', 'SHOW_EXTRA_CMDS',
              'IS_TEAM_DRIVE', 'USE_SERVICE_ACCOUNTS', 'WEB_PINCODE', 'EQUAL_SPLITS', 'DISABLE_DRIVE_LINK', 'DELETE_LINKS', 'CLEAN_LOG_MSG', 'USER_TD_MODE', 
@@ -358,11 +358,11 @@ async def load_config():
 
     UPSTREAM_REPO = environ.get('UPSTREAM_REPO', '')
     if len(UPSTREAM_REPO) == 0:
-        UPSTREAM_REPO = 'https://github.com/Tamilupdates/KPSML-X'
+        UPSTREAM_REPO = 'https://github.com/mdsaif572/KPSML-X'
 
     UPSTREAM_BRANCH = environ.get('UPSTREAM_BRANCH', '')
     if len(UPSTREAM_BRANCH) == 0:
-        UPSTREAM_BRANCH = 'kpsmlx'
+        UPSTREAM_BRANCH = 'upstream'
 
     UPGRADE_PACKAGES = environ.get('UPGRADE_PACKAGES', '')
     UPGRADE_PACKAGES = UPGRADE_PACKAGES.lower() == 'true'
@@ -450,15 +450,15 @@ async def load_config():
 
     AUTHOR_NAME = environ.get('AUTHOR_NAME', '')
     if len(AUTHOR_NAME) == 0:
-        AUTHOR_NAME = 'KPS Bots'
+        AUTHOR_NAME = 'Cloud Station'
 
     AUTHOR_URL = environ.get('AUTHOR_URL', '')
     if len(AUTHOR_URL) == 0:
-        AUTHOR_URL = 'https://telegram.me/KPSBots'
+        AUTHOR_URL = 'https://telegram.me/cloud_station9'
 
     TITLE_NAME = environ.get('TITLE_NAME', '')
     if len(TITLE_NAME) == 0:
-        TITLE_NAME = 'KPSML-X Leech Bot'
+        TITLE_NAME = 'Cloud Station Leech Bot'
         
     COVER_IMAGE = environ.get('COVER_IMAGE', '')
     if len(COVER_IMAGE) == 0:
@@ -466,7 +466,7 @@ async def load_config():
 
     GD_INFO = environ.get('GD_INFO', '')
     if len(GD_INFO) == 0:
-        GD_INFO = 'Uploaded by KPSML-X Leech Bot'
+        GD_INFO = 'Uploaded by Cloud Station Leech Bot'
 
     SAVE_MSG = environ.get('SAVE_MSG', '')
     SAVE_MSG = SAVE_MSG.lower() == 'true'

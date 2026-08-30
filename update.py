@@ -59,11 +59,11 @@ if UPGRADE_PACKAGES.lower() == 'true':
 
 UPSTREAM_REPO = environ.get('UPSTREAM_REPO', '')
 if len(UPSTREAM_REPO) == 0:
-    UPSTREAM_REPO = "https://github.com/Tamilupdates/KPSML-X"
+    UPSTREAM_REPO = "https://github.com/mdsaif572/KPSML-X"
 
 UPSTREAM_BRANCH = environ.get('UPSTREAM_BRANCH', '')
 if len(UPSTREAM_BRANCH) == 0:
-    UPSTREAM_BRANCH = 'kpsmlx'
+    UPSTREAM_BRANCH = 'upstream'
 
 if UPSTREAM_REPO is not None:
     if ospath.exists('.git'):

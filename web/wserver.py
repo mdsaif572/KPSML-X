@@ -221,20 +221,20 @@ function s_validate() {
 </script>
 </head>
 <body>
-  <!--© Designed and coded by @KPSBots-Telegram-->
+  <!--© Designed and coded by @cloud_station9-Telegram-->
     <header>
       <div class="brand">
         <img
           src="https://graph.org/file/1a6ad157f55bc42b548df.png"
           alt="logo"
         />
-        <a href="https://telegram.me/KPSBots">
+        <a href="https://telegram.me/cloud_station9">
           <h2 class="name">Bittorrent Selection</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://github.com/Tamilupdates/KPSML-X"><i class="fab fa-github"></i></a>
-        <a href="https://telegram.me/KPSBots"><i class="fab fa-telegram"></i></a>
+        <a href="https://github.com/mdsaif572/KPSML-X"><i class="fab fa-github"></i></a>
+        <a href="https://telegram.me/cloud_station9"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <div id="sticks">
@@ -613,20 +613,20 @@ section span{
     </style>
   </head>
 <body>
-   <!--© Designed and coded by @KPSBots-Telegram-->
+   <!--© Designed and coded by @cloud_station9-Telegram-->
     <header>
       <div class="brand">
         <img
           src="https://graph.org/file/1a6ad157f55bc42b548df.png"
           alt="logo"
         />
-        <a href="https://telegram.me/KPSBots">
+        <a href="https://telegram.me/cloud_station9">
           <h2 class="name">Bittorrent Selection</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://github.com/Tamilupdates/KPSML-X"><i class="fab fa-github"></i></a>
-        <a href="https://telegram.me/KPSBots"><i class="fab fa-telegram"></i></a>
+        <a href="https://github.com/mdsaif572/KPSML-X"><i class="fab fa-github"></i></a>
+        <a href="https://telegram.me/cloud_station9"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <section>
@@ -831,16 +831,16 @@ def homepage():
 </head>
 <body>
     <div class="header">
-        <h1>KPSML-X</h1>
+        <h1>Cloud Station</h1>
     </div>
     <div class="content">
         <img src="https://graph.org/file/0ff9d5e94a070fe4154c0.jpg" class="image">
-        <a href="https://telegram.me/KPSBots" style="text-decoration: none;">
+        <a href="https://telegram.me/cloud_station9" style="text-decoration: none;">
             <button class="button">Join Updates Channel Now</button>
         </a>
     </div>
     <div class="footer">
-&copy; <script>document.write(new Date().getFullYear() + '-' + String(new Date().getFullYear() + 1).slice(-2));</script> KPSML-X. All Rights Reserved.
+&copy; <script>document.write(new Date().getFullYear() + '-' + String(new Date().getFullYear() + 1).slice(-2));</script> Cloud Station. All Rights Reserved.
     </div>
 </body>
 </html>
