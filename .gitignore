@@ -3,6 +3,9 @@ config.env
 data*
 .vscode
 .idea
+.venv/
+.venv*/
+__pycache__/
 *.json
 *.pickle
 .netrc

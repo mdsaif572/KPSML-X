@@ -1,3 +1,6 @@
+flask
+gunicorn
+gevent
 aiohttp
 aiofiles
 aioshutil
@@ -12,13 +15,9 @@ curl_cffi
 cryptography
 dnspython
 feedparser
-flask
-gevent
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-gunicorn
-git+https://github.com/zevtyardt/lk21.git
 httpx
 langcodes[data]
 lxml
@@ -45,6 +44,6 @@ uv
 uvloop==0.21.0
 xattr
 yt-dlp
-setuptools
 pymediainfo
 pyaes
+git+https://github.com/zevtyardt/lk21.git

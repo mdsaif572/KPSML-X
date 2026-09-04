@@ -1,1 +1,5 @@
-python3 update.py && python3 -m bot
+#!/usr/bin/env bash
+set -e
+
+python3 update.py
+exec python3 -m bot
